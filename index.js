@@ -41,23 +41,33 @@
 //     console.log(error.message);
 //   });
 // Practice Test Using fetch POST;
-const main_URL = "http://localhost:3000/users";
 
 function submitData(name, email) {
   const formData = {};
   formData.name = name;
   formData.email = email;
-  const configurations = {
+  const configurationObject = {
     method: "POST",
-    header: {
-      "content-type": "application/json",
-      Accept: "Object/user-email",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
     },
     body: JSON.stringify(formData),
   };
+  return fetch("http://localhost:3000/users", configurationObject)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (object) {
+      let h1 = document.createElement("h1");
+      h1.textContent = object.id;
 
-  return fetch(main_URL, configurations)
-    .then((resp) => resp.json())
-    .then((data) => console.log(data))
-    .catch((error) => console.log(`Unauthorized Access:  ${error}`));
+      document.getElementById("add-Container").appendChild(h1);
+    })
+    .catch(function (error) {
+      console.log(`Unauthorized Access ${error}`);
+      let h1 = document.createElement("h1");
+      h1.textContent = `Unauthorized Access ${error}`;
+      document.getElementById("add-Container").append(h1);
+    });
 }
